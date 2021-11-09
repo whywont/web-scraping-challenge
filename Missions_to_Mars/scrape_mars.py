@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def scrape():
-    
+
     scrape_dict = {}
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser('chrome', **executable_path, headless=False)
@@ -22,8 +22,8 @@ def scrape():
     news_title = soup.find('div', class_= 'content_title').text
     desc = soup.find('div', class_ = 'article_teaser_body').text
 
-    scrape_dict['news title'] = news_title
-    scrape_dict['news desc'] = desc
+    scrape_dict['news_title'] = news_title
+    scrape_dict['news_desc'] = desc
 
     #Scrape Mars images
     url_space = 'https://spaceimages-mars.com/'
@@ -35,7 +35,7 @@ def scrape():
     featured_image_src = soup.find('img', class_ = 'headerimage fade-in')['src']
     featured_image = url_space + featured_image_src
 
-    scrape_dict['featured image'] = featured_image
+    scrape_dict['featured_image'] = featured_image
 
     #Scrape table
     url_table = 'https://galaxyfacts-mars.com/'
@@ -45,11 +45,11 @@ def scrape():
     df.head()
     df = df.transpose()
     table_df = df.rename(columns=df.iloc[0])
-    table_df = table_df.drop([0])
-
     html_table = table_df.to_html()
-    scrape_dict['facts table'] = html_table
+    html_table
 
+
+    scrape_dict['facts_table'] = html_table
     #Scrape Hemisphere images
     url_hemi = 'https://marshemispheres.com/'
     browser.visit(url_hemi)
@@ -77,9 +77,11 @@ def scrape():
         browser.back()
         hemisphere_imgs.append(links)
 
-    scrape_dict['hemisphere images'] = hemisphere_imgs
+    scrape_dict['hemisphere_images'] = hemisphere_imgs
 
-    print(scrape_dict)
+    browser.quit()
+
+    return scrape_dict
 
 
 scrape()
